@@ -1,58 +1,49 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import css from '../Searchbar/Searchbar.module.css';
 import { MdManageSearch } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export class SearchForm extends Component {
-  state = {
-    searchQuery: '',
+export const SearchForm = ({ searchQuery, onSubmit }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleChange = e => {
+    setSearchQuery(e.currentTarget.value);
   };
 
-  handleChange = e => {
-    this.setState({
-      searchQuery: e.currentTarget.value,
-    });
-  };
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    if (this.state.searchQuery.trim() === '') {
+    if (searchQuery.trim() === '') {
       toast.warn('Веддіть текст пошуку');
       return;
     }
-    this.props.onSubmit(this.state.searchQuery);
+    onSubmit(searchQuery);
     this.reset();
   };
 
-  reset() {
-    this.setState({
-      searchQuery: '',
-    });
-  }
+  const reset = () => {
+    setSearchQuery('');
+  };
 
-  render() {
-    const { searchQuery } = this.state;
-    return (
-      <header>
-        <form className={css.formStyle} onSubmit={this.handleSubmit}>
-          <input
-            className={css.input}
-            onChange={this.handleChange}
-            type="text"
-            value={searchQuery}
-            autoComplete="off"
-            placeholder="Search images and photos"
-            autoFocus
+  return (
+    <header>
+      <form className={css.formStyle} onSubmit={handleSubmit}>
+        <input
+          className={css.input}
+          onChange={handleChange}
+          type="text"
+          value={searchQuery}
+          autoComplete="off"
+          placeholder="Search images and photos"
+          autoFocus
+        />
+        <button className={css.buttonSearch} type="submit">
+          <MdManageSearch
+            className={css.svg}
+            style={{ width: '30px', height: '30px' }}
           />
-          <button className={css.buttonSearch} type="submit">
-            <MdManageSearch
-              className={css.svg}
-              style={{ width: '30px', height: '30px' }}
-            />
-          </button>
-        </form>
-      </header>
-    );
-  }
-}
+        </button>
+      </form>
+    </header>
+  );
+};

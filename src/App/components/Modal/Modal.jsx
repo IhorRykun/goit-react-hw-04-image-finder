@@ -1,38 +1,34 @@
-import { React, Component } from 'react';
+import { useEffect } from 'react';
 import { MidalContent, ModalBackDrop } from './Modal.styled';
 import PropTypes from 'prop-types';
 
-export class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.onKeyDown);
-  }
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onKeyDown);
-  }
+export const Modal = ({ onModalClick, largeImage, alt }) => {
+  useEffect(() => {
+    window.addEventListener('keydown', onKeyDown);
+    window.removeEventListener('keydown', onKeyDown);
+  }, []);
 
-  onKeyDown = e => {
+  const onKeyDown = e => {
     if (e.code === 'Escape') {
-      this.props.onModalClick();
+      onModalClick();
     }
   };
 
-  onBackDropClick = e => {
+  const onBackDropClick = e => {
     if (e.target === e.currentTarget) {
-      this.props.onModalClick();
+      onModalClick();
     }
   };
 
-  render() {
-    const { largeImage, alt } = this.props;
-    return (
-      <ModalBackDrop onClick={this.onBackDropClick}>
-        <MidalContent>
-          <img src={largeImage} style={{ width: '1024px' }} alt={alt} />
-        </MidalContent>
-      </ModalBackDrop>
-    );
-  }
-}
+
+  return (
+    <ModalBackDrop onClick={onBackDropClick}>
+      <MidalContent>
+        <img src={largeImage} style={{ width: '1024px' }} alt={alt} />
+      </MidalContent>
+    </ModalBackDrop>
+  );
+};
 
 Modal.prototypes = {
   alt: PropTypes.string.isRequired,
