@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/goit-react-hw-03-image-finder/static/css/main.ab2f84ef.css",
+    "main.js": "/goit-react-hw-03-image-finder/static/js/main.0a8ec67a.js",
+    "index.html": "/goit-react-hw-03-image-finder/index.html",
+    "main.ab2f84ef.css.map": "/goit-react-hw-03-image-finder/static/css/main.ab2f84ef.css.map",
+    "main.0a8ec67a.js.map": "/goit-react-hw-03-image-finder/static/js/main.0a8ec67a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ab2f84ef.css",
+    "static/js/main.0a8ec67a.js"
+  ]
+}
