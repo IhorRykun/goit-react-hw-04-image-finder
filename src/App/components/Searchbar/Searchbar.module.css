@@ -1,0 +1,41 @@
+.formStyle {
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  color: white;
+  border: none;
+  border-bottom: 2px solid white;
+  outline: none;
+  background-color: transparent;
+  height: 30px;
+}
+
+.input:hover,
+.input:focus {
+  border: none;
+  border-bottom: 2px solid orange;
+}
+
+.buttonSearch {
+  width: 50px;
+  padding: 5px 0;
+  background-color: #1e2939;
+  color: white;
+  margin-left: 5px;
+  border-radius: 15px;
+  cursor: pointer;
+  border: 1px solid white;
+}
+
+.buttonSearch:hover,
+.buttonSearch:focus {
+  outline: 2px solid orange;
+  border: 1px solid white;
+}
+
+.buttonSearch:hover .svg,
+.buttonSearch:focus .svg {
+  fill: orange;
+}

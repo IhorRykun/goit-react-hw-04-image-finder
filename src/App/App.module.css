@@ -1,0 +1,22 @@
+.container {
+  background-color: #1e2939;
+  margin-top: 20px;
+  padding: 30px 0;
+  border-radius: 10px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+.container_main {
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: white;
+  border-radius: 15px;
+}
+.spiner__container {
+  display: flex;
+  justify-content: center;
+}
