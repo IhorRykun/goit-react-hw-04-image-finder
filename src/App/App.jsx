@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ImgGalleryList } from './components/ImgGalleryList/ImgGalleryList';
 import { SearchForm } from './components/Searchbar/Searchbar';
 import { Modal } from './components/Modal/Modal';
@@ -9,102 +9,89 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThreeCircles } from 'react-loader-spinner';
 
-export const App =()=> {
+export const App = () => {
+  const [images, setImages] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [largeImageURL, setLargeImageURL] = useState('');
+  const [tags, seTtags] = useState('');
+  const [totalHits, setTotalHits] = useState(0);
 
- [img, setImg] = useState([]);
- [searchQuery, setSearchQuery] = useState('');
- [page, setPage] = useState(1);
- [error, setError] = useState(null);
- [isLoading, setIsLoading] = useState(false);
- [showModal, setShowModal] = useState(false);
- [originalImageURL, setOriginalImageURL] = useState('');
- [tags, seTtags] = useState("");
-
-
-
-  componentDidUpdate(prevProps, prevState) {
-    const prevSearchQuery = prevState.searchQuery;
-    const nextSearchQuery = this.state.searchQuery;
-    const prevPage = prevState.page;
-    const page = this.state.page;
-
-    if (prevSearchQuery !== nextSearchQuery || prevPage !== page) {
-      renderGalery();
+  useEffect(() => {
+    if (!searchQuery) {
+      return;
     }
-  }
+    const renderGallery = async () => {
+      setIsLoading(true);
 
-  const renderGalery = async () => {
-    const { searchQuery, page } = this.state;
-    this.setState({ isLoading: true });
-    try {
-      const { hits, totalHits } = await fetchImg(searchQuery, page);
-      if (totalHits === 0) {
-        toast.warn(
-          'Вибачте, пошук за вашим запитом не дав результатів. Спробуйте ще раз...'
-        );
+      try {
+        const { hits, totalHits } = await fetchImg(searchQuery, page);
+
+        if (totalHits === 0) {
+          toast.warn(
+            'Sorry, there are no images matching your search query. Please try again.'
+          );
+        }
+        const newImages = needValues(hits);
+
+        setImages(images => [...images, ...newImages]);
+        setTotalHits(totalHits);
+      } catch {
+        setError(error);
+        toast.error('Oops... Something went wrong');
+      } finally {
+        setIsLoading(false);
       }
-      const newImages = needValues(hits);
+    };
+    renderGallery();
+  }, [error, page, searchQuery]);
 
-      this.setState(({ images }) => ({
-        images: [...images, ...newImages],
-        totalHits,
-      }));
-    } catch (error) {
-      this.setState({
-        error,
-      });
-      toast.error('Упс, щось пішло не так, будь ласка спробуйте ще раз');
-    } finally {
-      this.setState({ isLoading: false });
-    }
-  };
-
- const onSubmitForm = searchQuery => {
-    this.setState({ searchQuery, images: [], page: 1 });
+  const onSubmitForm = searchQuery => {
+    setSearchQuery(searchQuery);
+    setImages([]);
+    setPage(1);
   };
 
   const onLoadMore = () => {
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-    }));
+    setPage(page => page + 1);
   };
 
-  openModal = (originalImageURL, tags) => {
+  const openModal = (largeImageURL, tags) => {
     toggleModal();
-    this.setState({ originalImageURL, tags });
+    setLargeImageURL(largeImageURL);
+    seTtags(tags);
   };
 
   const toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
+    setShowModal(!showModal);
   };
 
-    const { images, originalImageURL, tags, showModal, totalHits, isLoading } =
-      this.state;
-    const allImages = images.length === totalHits;
-    return (
-      <>
-        <ToastContainer />
-        <header className={css.container}>
-          <SearchForm onSubmit={this.onSubmitForm} />
-        </header>
-        <div className={css.spiner__container}>
-          {isLoading && <ThreeCircles color="#1e2939" />}
-        </div>
-        <main className={css.container_main}>
-          <ImgGalleryList images={images} onOpenModal={this.openModal} />
-          {images.length !== 0 && !isLoading && !allImages && (
-            <ButtonLoadImg onClick={this.onLoadMore} />
-          )}
-          {showModal && (
-            <Modal
-              onModalClick={this.toggleModal}
-              largeImage={originalImageURL}
-              alt={tags}
-            />
-          )}
-        </main>
-      </>
-    );
+  const allImages = images.length === totalHits;
+  return (
+    <>
+      <ToastContainer />
+      <header className={css.container}>
+        <SearchForm onSubmit={onSubmitForm} />
+      </header>
+      <div className={css.spiner__container}>
+        {isLoading && <ThreeCircles color="#1e2939" />}
+      </div>
+      <main className={css.container_main}>
+        <ImgGalleryList images={images} onOpenModal={openModal} />
+        {images.length !== 0 && !isLoading && !allImages && (
+          <ButtonLoadImg onClick={onLoadMore} />
+        )}
+        {showModal && (
+          <Modal
+            onModalClick={toggleModal}
+            largeImage={largeImageURL}
+            alt={tags}
+          />
+        )}
+      </main>
+    </>
+  );
 };
