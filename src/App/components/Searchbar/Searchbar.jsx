@@ -4,7 +4,7 @@ import { MdManageSearch } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export const SearchForm = ({ searchQuery, onSubmit }) => {
+export const SearchForm = ({ onSubmit }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleChange = e => {
@@ -18,7 +18,7 @@ export const SearchForm = ({ searchQuery, onSubmit }) => {
       return;
     }
     onSubmit(searchQuery);
-    this.reset();
+    reset();
   };
 
   const reset = () => {

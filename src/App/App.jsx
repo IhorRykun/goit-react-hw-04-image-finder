@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState,useEffect } from 'react';
 import { ImgGalleryList } from './components/ImgGalleryList/ImgGalleryList';
 import { SearchForm } from './components/Searchbar/Searchbar';
 import { Modal } from './components/Modal/Modal';
@@ -9,17 +9,18 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThreeCircles } from 'react-loader-spinner';
 
-export class App extends Component {
-  state = {
-    images: [],
-    searchQuery: '',
-    page: 1,
-    error: null,
-    isLoading: false,
-    showModal: false,
-    originalImageURL: '',
-    tags: '',
-  };
+export const App =()=> {
+
+ [img, setImg] = useState([]);
+ [searchQuery, setSearchQuery] = useState('');
+ [page, setPage] = useState(1);
+ [error, setError] = useState(null);
+ [isLoading, setIsLoading] = useState(false);
+ [showModal, setShowModal] = useState(false);
+ [originalImageURL, setOriginalImageURL] = useState('');
+ [tags, seTtags] = useState("");
+
+
 
   componentDidUpdate(prevProps, prevState) {
     const prevSearchQuery = prevState.searchQuery;
@@ -28,11 +29,11 @@ export class App extends Component {
     const page = this.state.page;
 
     if (prevSearchQuery !== nextSearchQuery || prevPage !== page) {
-      this.renderGalery();
+      renderGalery();
     }
   }
 
-  renderGalery = async () => {
+  const renderGalery = async () => {
     const { searchQuery, page } = this.state;
     this.setState({ isLoading: true });
     try {
@@ -58,28 +59,27 @@ export class App extends Component {
     }
   };
 
-  onSubmitForm = searchQuery => {
+ const onSubmitForm = searchQuery => {
     this.setState({ searchQuery, images: [], page: 1 });
   };
 
-  onLoadMore = () => {
+  const onLoadMore = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
   };
 
   openModal = (originalImageURL, tags) => {
-    this.toggleModal();
+    toggleModal();
     this.setState({ originalImageURL, tags });
   };
 
-  toggleModal = () => {
+  const toggleModal = () => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
     }));
   };
 
-  render() {
     const { images, originalImageURL, tags, showModal, totalHits, isLoading } =
       this.state;
     const allImages = images.length === totalHits;
@@ -107,5 +107,4 @@ export class App extends Component {
         </main>
       </>
     );
-  }
-}
+};

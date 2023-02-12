@@ -5,8 +5,11 @@ import PropTypes from 'prop-types';
 export const Modal = ({ onModalClick, largeImage, alt }) => {
   useEffect(() => {
     window.addEventListener('keydown', onKeyDown);
+  });
+
+  useEffect(() => {
     window.removeEventListener('keydown', onKeyDown);
-  }, []);
+  });
 
   const onKeyDown = e => {
     if (e.code === 'Escape') {
@@ -19,7 +22,6 @@ export const Modal = ({ onModalClick, largeImage, alt }) => {
       onModalClick();
     }
   };
-
 
   return (
     <ModalBackDrop onClick={onBackDropClick}>
