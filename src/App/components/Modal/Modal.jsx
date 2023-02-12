@@ -7,10 +7,6 @@ export const Modal = ({ onModalClick, largeImage, alt }) => {
     window.addEventListener('keydown', onKeyDown);
   });
 
-  useEffect(() => {
-    window.removeEventListener('keydown', onKeyDown);
-  });
-
   const onKeyDown = e => {
     if (e.code === 'Escape') {
       onModalClick();
